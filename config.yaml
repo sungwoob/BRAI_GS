@@ -1,0 +1,7 @@
+task: classification
+target_column: target
+session_id: 42
+model_output_path: automl_model
+cross_validation:
+  enabled: true
+  folds: 5
