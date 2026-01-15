@@ -45,11 +45,22 @@ def run_automl(config: dict, dataset: pd.DataFrame) -> None:
     cv_config = config.get("cross_validation", {})
     use_cv = cv_config.get("enabled", True)
     folds = cv_config.get("folds", 5)
+    model_name = config.get("model_name")
 
     if task == "classification":
-        from pycaret.classification import compare_models, finalize_model, setup
+        from pycaret.classification import (
+            compare_models,
+            create_model,
+            finalize_model,
+            setup,
+        )
     elif task == "regression":
-        from pycaret.regression import compare_models, finalize_model, setup
+        from pycaret.regression import (
+            compare_models,
+            create_model,
+            finalize_model,
+            setup,
+        )
     else:
         raise ValueError("task must be 'classification' or 'regression'")
 
@@ -62,8 +73,11 @@ def run_automl(config: dict, dataset: pd.DataFrame) -> None:
         verbose=False,
     )
 
-    best_model = compare_models(fold=folds if use_cv else 1)
-    finalized = finalize_model(best_model)
+    if model_name:
+        model = create_model(model_name, fold=folds if use_cv else 1)
+    else:
+        model = compare_models(fold=folds if use_cv else 1)
+    finalized = finalize_model(model)
 
     output_path = config.get("model_output_path")
     if output_path:

@@ -12,7 +12,7 @@ pip install pycaret pandas pyyaml
 
 ### Configure
 
-Edit `config.yaml` to set task, target column, cross-validation, and output path.
+Edit `config.yaml` to set task, target column, model choice, cross-validation, and output path.
 
 ### Run with a single CSV (features + target)
 
