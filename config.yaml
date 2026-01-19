@@ -1,5 +1,11 @@
 task: classification
-target_column: target
+target_columns:
+  - target
+data_path:
+x_path:
+y_path:
+genotype_dir:
+phenotype_dir:
 model_name:
 session_id: 42
 model_output_path: automl_model
