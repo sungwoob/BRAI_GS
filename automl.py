@@ -29,6 +29,19 @@ def resolve_targets(config: dict, cli_target: str | None) -> list[str]:
     raise ValueError("target_column or target_columns must be provided")
 
 
+def resolve_data_paths(config: dict, args: argparse.Namespace) -> dict:
+    def resolve_path(value: str | None) -> Path | None:
+        return Path(value) if value else None
+
+    return {
+        "data_path": args.data or resolve_path(config.get("data_path")),
+        "x_path": args.x or resolve_path(config.get("x_path")),
+        "y_path": args.y or resolve_path(config.get("y_path")),
+        "genotype_dir": args.genotype_dir or resolve_path(config.get("genotype_dir")),
+        "phenotype_dir": args.phenotype_dir or resolve_path(config.get("phenotype_dir")),
+    }
+
+
 def load_dataset(
     data_path: Path | None,
     x_path: Path | None,
@@ -199,12 +212,13 @@ def main() -> None:
 
     config = load_config(args.config)
     targets = resolve_targets(config, args.target)
+    data_paths = resolve_data_paths(config, args)
     dataset = load_dataset(
-        args.data,
-        args.x,
-        args.y,
-        args.genotype_dir,
-        args.phenotype_dir,
+        data_paths["data_path"],
+        data_paths["x_path"],
+        data_paths["y_path"],
+        data_paths["genotype_dir"],
+        data_paths["phenotype_dir"],
         targets,
     )
     multiple_targets = len(targets) > 1
