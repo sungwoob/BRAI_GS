@@ -1,5 +1,6 @@
 task: classification
-target_column: target
+target_columns:
+  - target
 model_name:
 session_id: 42
 model_output_path: automl_model
